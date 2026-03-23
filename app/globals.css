@@ -1,17 +1,7 @@
+@import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@tailwind base;
 
 @custom-variant dark (&:is(.dark *));
-@tailwind components;
-@tailwind utilities;
-
-body {
-  background: #020617;
-  color: #f8fafc;
-  font-family: 'Inter', sans-serif;
-}
 
 /* Custom Scrollbar for the Glass look */
 ::-webkit-scrollbar {
@@ -95,7 +85,7 @@ body {
 }
 
 @theme inline {
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -141,9 +131,60 @@ body {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply min-h-screen bg-background text-foreground;
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer components {
+  .text-cyan-glow {
+    @apply text-cyan-300;
+    text-shadow:
+      0 0 8px rgba(34, 211, 238, 0.45),
+      0 0 22px rgba(56, 189, 248, 0.28);
+  }
+
+  .card-cyan-glow {
+    border-color: rgba(103, 232, 249, 0.18);
+    box-shadow:
+      0 18px 42px rgba(2, 6, 23, 0.58),
+      0 0 0 1px rgba(56, 189, 248, 0.2),
+      0 0 34px rgba(34, 211, 238, 0.26),
+      inset 0 0 26px rgba(14, 165, 233, 0.09);
+    transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+  }
+
+  .card-cyan-glow:hover {
+    border-color: rgba(103, 232, 249, 0.4);
+    box-shadow:
+      0 24px 54px rgba(2, 6, 23, 0.64),
+      0 0 0 1px rgba(103, 232, 249, 0.34),
+      0 0 44px rgba(34, 211, 238, 0.38),
+      inset 0 0 30px rgba(6, 182, 212, 0.16);
+    transform: translateY(-2px);
+  }
+
+  .btn-cyan-glow {
+    @apply text-cyan-300;
+    text-shadow:
+      0 0 8px rgba(34, 211, 238, 0.48),
+      0 0 18px rgba(56, 189, 248, 0.26);
+    box-shadow:
+      inset 0 0 0 1px rgba(103, 232, 249, 0.32),
+      inset 0 0 20px rgba(14, 165, 233, 0.1),
+      0 12px 28px rgba(2, 6, 23, 0.46),
+      0 0 26px rgba(34, 211, 238, 0.34);
+    transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
+  }
+
+  .btn-cyan-glow:hover {
+    box-shadow:
+      inset 0 0 0 1px rgba(125, 242, 255, 0.46),
+      inset 0 0 30px rgba(6, 182, 212, 0.18),
+      0 18px 36px rgba(2, 6, 23, 0.56),
+      0 0 40px rgba(34, 211, 238, 0.46);
+    transform: translateY(-1px);
   }
 }
