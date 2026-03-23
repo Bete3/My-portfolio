@@ -47,6 +47,18 @@ export async function POST(request: Request) {
     const from = process.env.CONTACT_FROM_EMAIL ?? "Portfolio Contact <onboarding@resend.dev>";
 
     if (!resendApiKey || !to) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "Contact API is running in dev mode without RESEND_API_KEY / CONTACT_TO_EMAIL. Message was accepted but email was not sent.",
+          { name, email }
+        );
+        return NextResponse.json({
+          ok: true,
+          warning:
+            "Email sending is disabled in local dev until RESEND_API_KEY and CONTACT_TO_EMAIL are set.",
+        });
+      }
+
       return NextResponse.json(
         { error: "Server email is not configured. Add RESEND_API_KEY and CONTACT_TO_EMAIL." },
         { status: 500 }

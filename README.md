@@ -34,3 +34,21 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Contact Form Email Setup
+
+Create a `.env.local` file in the project root and copy values from `.env.example`.
+
+Required variables:
+
+- `RESEND_API_KEY`
+- `CONTACT_TO_EMAIL`
+
+Optional:
+
+- `CONTACT_FROM_EMAIL`
+
+Notes:
+
+- In local development, if required variables are missing, the contact API accepts the request but does not send an email.
+- In production, missing required variables returns a server error.
