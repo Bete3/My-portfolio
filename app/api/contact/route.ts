@@ -94,8 +94,33 @@ export async function POST(request: Request) {
     });
 
     if (!resendResponse.ok) {
+      let resendErrorMessage = "Unknown Resend error";
+
+      try {
+        const resendError = (await resendResponse.json()) as {
+          message?: string;
+          error?: string;
+          name?: string;
+        };
+        resendErrorMessage =
+          resendError.message ?? resendError.error ?? resendError.name ?? resendErrorMessage;
+      } catch {
+        // If response is not JSON, fall back to status text.
+        resendErrorMessage = resendResponse.statusText || resendErrorMessage;
+      }
+
+      console.error("Resend email send failed", {
+        status: resendResponse.status,
+        message: resendErrorMessage,
+        to,
+        from,
+      });
+
       return NextResponse.json(
-        { error: "Email service failed to send. Please verify your Resend settings." },
+        {
+          error:
+            "Email service failed to send. Verify RESEND_API_KEY, CONTACT_FROM_EMAIL (verified sender), and CONTACT_TO_EMAIL.",
+        },
         { status: 502 }
       );
     }

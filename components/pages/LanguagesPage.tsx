@@ -1,5 +1,3 @@
-import { GlassCard } from "@/components/GlassCard";
-
 const languages = [
   { name: "English", level: 95 },
   { name: "Amharic", level: 100 },
@@ -7,11 +5,15 @@ const languages = [
 
 export default function LanguagesPage() {
   return (
-    <GlassCard>
-      <h1 className="mb-2 text-3xl font-semibold text-cyan-300 md:text-4xl">Languages</h1>
-      <p className="mb-8 text-slate-400">Fluency and communication level by language.</p>
+    <section className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-4 py-16 md:px-8">
+      <div className="w-full max-w-4xl text-center">
+        <h1 className="mb-2 text-4xl font-semibold text-cyan-300 md:text-6xl">Languages</h1>
+        <p className="mx-auto mb-10 max-w-3xl text-slate-300 md:text-lg">
+          Fluency and communication confidence across professional collaboration, technical discussions, and
+          everyday conversations.
+        </p>
 
-      <div className="space-y-6">
+        <div className="space-y-6 text-left">
         {languages.map((language) => (
           <div key={language.name}>
             <div className="mb-2 flex items-center justify-between text-sm">
@@ -27,6 +29,7 @@ export default function LanguagesPage() {
           </div>
         ))}
       </div>
-    </GlassCard>
+      </div>
+    </section>
   );
 }

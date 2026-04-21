@@ -1,62 +1,75 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Briefcase, Code, Home, Languages, Mail, User } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "Hero", icon: Home },
-  { href: "/about", label: "About", icon: User },
-  { href: "/skills", label: "Skills", icon: Code },
-  { href: "/portfolio", label: "Portfolio", icon: Briefcase },
-  { href: "/education", label: "Education", icon: BookOpen },
-  { href: "/languages", label: "Languages", icon: Languages },
-  { href: "/contact", label: "Contact", icon: Mail },
+  { href: "/#hero", id: "hero", label: "Home" },
+  { href: "/#about", id: "about", label: "About" },
+  { href: "/#skills", id: "skills", label: "Skills" },
+  { href: "/#portfolio", id: "portfolio", label: "Portfolio" },
+  { href: "/#education", id: "education", label: "Resume" },
+  { href: "/#contact", id: "contact", label: "Contact" },
 ];
 
 export default function Sidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const lastWheelTime = useRef(0);
+  const [activeSection, setActiveSection] = useState("hero");
+  const tickingRef = useRef(false);
 
   useEffect(() => {
-    const onWheel = (event: WheelEvent) => {
-      const target = event.target as HTMLElement | null;
-      if (!target) return;
+    const computeActiveSection = () => {
+      const pageTop = window.scrollY <= 8;
+      if (pageTop) return "hero";
 
-      const tagName = target.tagName.toLowerCase();
-      if (["input", "textarea", "select", "button"].includes(tagName)) {
-        return;
+      const pageBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+      if (pageBottom) return "contact";
+
+      const viewportMiddle = window.innerHeight * 0.55;
+      let bestId = "hero";
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (const item of navItems) {
+        const section = document.getElementById(item.id);
+        if (!section) continue;
+
+        const rect = section.getBoundingClientRect();
+        const isVisible = rect.bottom > 0 && rect.top < window.innerHeight;
+        if (!isVisible) continue;
+
+        const sectionCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionCenter - viewportMiddle);
+
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestId = item.id;
+        }
       }
 
-      if (Math.abs(event.deltaY) < 20) return;
-
-      const currentIndex = navItems.findIndex((item) => item.href === pathname);
-      if (currentIndex < 0) return;
-
-      const direction = event.deltaY > 0 ? 1 : -1;
-      const nextIndex = currentIndex + direction;
-      if (nextIndex < 0 || nextIndex >= navItems.length) return;
-
-      const now = Date.now();
-      if (now - lastWheelTime.current < 220) return;
-      lastWheelTime.current = now;
-
-      event.preventDefault();
-      router.push(navItems[nextIndex].href);
+      return bestId;
     };
 
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [pathname, router]);
+    const onScroll = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+
+      window.requestAnimationFrame(() => {
+        const next = computeActiveSection();
+        setActiveSection((prev) => (prev === next ? prev : next));
+        tickingRef.current = false;
+      });
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <>
-      <aside className="fixed left-4 top-1/2 z-50 hidden -translate-y-1/2 md:flex md:flex-col md:gap-3 md:rounded-full md:border md:border-white/10 md:bg-white/5 md:p-3 md:backdrop-blur-xl md:shadow-[0_14px_36px_rgba(2,6,23,0.72),0_0_28px_rgba(34,211,238,0.28)]">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+      <nav className="mx-auto flex w-full max-w-6xl items-center gap-2 overflow-x-auto px-3 py-3 md:justify-center md:gap-8 md:px-6">
         {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = pathname === item.href;
+          const isActive = activeSection === item.id;
 
           return (
             <Link
@@ -64,43 +77,20 @@ export default function Sidebar() {
               href={item.href}
               aria-label={item.label}
               title={item.label}
-              className={`relative rounded-full p-3 transition-all duration-300 ${
-                active
-                    ? "bg-cyan-500 text-white shadow-[0_0_24px_rgba(6,182,212,0.75),0_8px_20px_rgba(2,6,23,0.55)]"
-                  : "text-slate-500 hover:bg-white/5 hover:text-cyan-300"
+              className={`relative inline-flex shrink-0 items-center px-2 py-2 text-sm font-medium transition md:text-base ${
+                isActive ? "text-pink-600" : "text-slate-700 hover:text-pink-600"
               }`}
             >
-              <span className="relative z-10 block">
-                <Icon size={20} />
-              </span>
-            </Link>
-          );
-        })}
-      </aside>
-
-      <nav className="fixed bottom-3 left-1/2 z-50 flex w-[95%] -translate-x-1/2 items-center justify-between rounded-2xl border border-white/10 bg-slate-950/70 px-3 py-2 shadow-[0_12px_30px_rgba(2,6,23,0.72),0_0_22px_rgba(34,211,238,0.2)] backdrop-blur-xl md:hidden">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = pathname === item.href;
-
-          return (
-            <Link
-              key={`${item.href}-mobile`}
-              href={item.href}
-              aria-label={item.label}
-              className={`relative rounded-xl px-2 py-2 transition ${
-                active
-                  ? "bg-cyan-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.72),0_6px_16px_rgba(2,6,23,0.5)]"
-                  : "text-slate-300"
-              }`}
-            >
-              <span className="relative z-10 block">
-                <Icon size={18} />
-              </span>
+              {item.label}
+              <span
+                className={`absolute -bottom-[13px] left-0 h-[2.5px] w-full rounded-full bg-pink-500 transition-transform duration-300 ${
+                  isActive ? "scale-x-100" : "scale-x-0"
+                }`}
+              />
             </Link>
           );
         })}
       </nav>
-    </>
+    </header>
   );
 }

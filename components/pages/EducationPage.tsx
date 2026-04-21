@@ -1,4 +1,4 @@
-import { GlassCard } from "@/components/GlassCard";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const education = [
   {
@@ -19,29 +19,36 @@ const education = [
 
 export default function EducationPage() {
   return (
-    <GlassCard>
-      <h1 className="mb-8 text-3xl font-semibold text-cyan-300 md:text-4xl">Education</h1>
+    <section className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-4 py-16 md:px-8">
+      <ScrollReveal className="w-full max-w-5xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
+        <div className="text-center">
+        <p className="section-tag">My Formal Education</p>
+        <h1 className="mb-3 mt-2 text-5xl font-semibold text-slate-900 md:text-7xl">My Resume</h1>
+        <p className="mx-auto mb-10 max-w-3xl text-lg text-slate-600 md:text-2xl">
+          My learning path combines formal computer science education with intensive practical training in
+          algorithms, software engineering, and real-world product development.
+        </p>
 
-      <div className="space-y-4">
+        <div className="space-y-8 text-left">
         {education.map((item) => (
           <div
             key={item.title}
-            className="card-cyan-glow rounded-2xl border border-white/10 bg-white/5 p-5"
+            className="rounded-xl border border-slate-200 bg-slate-50 p-5"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-slate-100">{item.title}</h2>
-                <p className="text-sm text-slate-400">{item.school}</p>
+                <h2 className="text-2xl font-semibold text-slate-900">{item.title}</h2>
+                <p className="text-base text-slate-500">{item.school}</p>
               </div>
-              <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-200">
+              <span className="rounded-full border border-pink-200 bg-pink-50 px-3 py-1 text-xs font-semibold text-pink-600">
                 {item.year}
               </span>
             </div>
             <div className="mt-4">
-              <h3 className="text-md font-semibold text-slate-200">Relevant Courses:</h3>
+              <h3 className="text-lg font-semibold text-slate-700">Relevant Courses:</h3>
               <ul className="mt-2 space-y-1">
                 {item.courses.map((course) => (
-                  <li key={course} className="text-sm text-slate-400">
+                  <li key={course} className="text-base text-slate-600">
                     • {course}
                   </li>
                 ))}
@@ -50,6 +57,8 @@ export default function EducationPage() {
           </div>
         ))}
       </div>
-    </GlassCard>
+        </div>
+      </ScrollReveal>
+    </section>
   );
 }

@@ -1,4 +1,4 @@
-import { GlassCard } from "@/components/GlassCard";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const projects = [
   {
@@ -36,34 +36,35 @@ const projects = [
 
 export default function PortfolioPage() {
   return (
-    <GlassCard>
-      <div className="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold text-cyan-300 md:text-4xl">My Portfolio</h1>
-          <p className="mt-2 text-slate-400">A collection of recent visual and web projects.</p>
-        </div>
-      </div>
+    <section className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-4 py-16 md:px-8">
+      <ScrollReveal className="w-full max-w-5xl text-center">
+        <p className="section-tag">Visit My Portfolio And Keep Your Feedback</p>
+        <h1 className="text-5xl font-semibold text-slate-900 md:text-7xl">My Portfolio</h1>
+        <p className="mx-auto mt-3 max-w-3xl text-lg text-slate-600 md:text-2xl">
+          A curated collection of product interfaces and web applications built with a strong focus on usability,
+          visual identity, and maintainable frontend architecture.
+        </p>
 
-      <div className="grid gap-4 md:grid-cols-2">
+        <div className="mt-12 grid gap-8 md:grid-cols-2 md:text-left">
         {projects.map((project, index) => (
-          <article
-            key={project.title}
-            className="card-cyan-glow rounded-2xl border border-white/10 bg-slate-900/60 p-4 transition hover:border-cyan-400/45 hover:bg-slate-900"
-          >
-            <div className="mb-3 h-24 rounded-xl bg-[radial-gradient(circle_at_20%_15%,rgba(56,189,248,0.5),transparent_50%),linear-gradient(135deg,#0f172a,#111827)]" />
-            <p className="text-cyan-glow text-xs uppercase tracking-[0.17em] text-cyan-300/90">Project {index + 1}</p>
-            <h2 className="mt-1 text-lg font-semibold text-slate-100">{project.title}</h2>
-            <p className="mt-2 text-sm font-medium text-cyan-200/90">{project.subtitle}</p>
-            <ul className="mt-3 space-y-2">
+          <article key={project.title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <div className="project-thumb h-44 rounded-xl" />
+            <div className="pt-4">
+              <p className="text-xs uppercase tracking-[0.17em] text-pink-500">Project {index + 1}</p>
+              <h2 className="mt-1 text-2xl font-semibold text-slate-900">{project.title}</h2>
+              <p className="mt-1 text-base font-medium text-indigo-500">{project.subtitle}</p>
+              <ul className="space-y-2">
               {project.highlights.map((item) => (
-                <li key={item} className="text-sm leading-relaxed text-slate-400">
+                <li key={item} className="text-base leading-relaxed text-slate-600">
                   • {item}
                 </li>
               ))}
             </ul>
+            </div>
           </article>
         ))}
       </div>
-    </GlassCard>
+      </ScrollReveal>
+    </section>
   );
 }
