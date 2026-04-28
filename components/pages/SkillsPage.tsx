@@ -1,4 +1,7 @@
+"use client";
+
 import ScrollReveal from "@/components/ScrollReveal";
+import { motion } from "framer-motion";
 
 const skills = [
   { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
@@ -6,13 +9,16 @@ const skills = [
   { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
   { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
   { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+  { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
   { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
 ];
+
+const marqueeSkills = [...skills, ...skills];
 
 export default function SkillsPage() {
   return (
     <section className="flex min-h-[calc(100vh-7rem)] items-center justify-center px-4 py-16 md:px-8">
-      <ScrollReveal className="w-full max-w-5xl">
+      <ScrollReveal className="w-full max-w-6xl">
         <div className="text-center md:text-left">
           <p className="section-tag">What I Do</p>
           <h1 className="mb-2 mt-2 text-5xl font-semibold text-slate-900 md:text-7xl">My Skills</h1>
@@ -22,18 +28,26 @@ export default function SkillsPage() {
             experiences that look great and feel smooth.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            {skills.map((skill) => (
-              <article
-                key={skill.name}
-                className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          <div className="mb-8 overflow-hidden rounded-full border border-slate-200 bg-white/70 py-3 shadow-sm backdrop-blur-sm">
+            <div className="pointer-events-none relative">
+              <div className="absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-slate-50 to-transparent" />
+              <div className="absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-slate-50 to-transparent" />
+              <motion.div
+                className="flex w-max items-center gap-4 px-6"
+                animate={{ x: [0, -50 + "%"] }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
               >
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-slate-50">
-                  <img src={skill.icon} alt={skill.name} className="h-9 w-9 object-contain" />
-                </div>
-                <h3 className="text-base font-semibold text-slate-800">{skill.name}</h3>
-              </article>
-            ))}
+                {marqueeSkills.map((skill, index) => (
+                  <div
+                    key={`${skill.name}-${index}`}
+                    className="flex shrink-0 items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm"
+                  >
+                    <img src={skill.icon} alt={skill.name} className="h-6 w-6 object-contain md:h-7 md:w-7" />
+                    <span className="whitespace-nowrap text-sm font-semibold text-slate-700 md:text-base">{skill.name}</span>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
       </ScrollReveal>
